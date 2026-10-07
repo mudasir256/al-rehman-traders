@@ -13,11 +13,6 @@ import { useLenis } from "@/components/smooth-scroll";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-function itemHref(href: string, pathname: string) {
-  if (href.startsWith("/#") && pathname === "/") return href.slice(1);
-  return href;
-}
-
 export function SiteHeader() {
   const pathname = usePathname();
   const lenis = useLenis();
@@ -49,23 +44,16 @@ export function SiteHeader() {
 
         <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
           {nav.map((item) => {
-            const href = itemHref(item.href, pathname);
-            const active =
-              item.href === "/services"
-                ? pathname.startsWith("/services")
-                : item.href === "/contact"
-                  ? pathname.startsWith("/contact")
-                  : false;
-            const className = cn(
-              "font-mono text-[11px] uppercase tracking-[0.18em] text-ink/80 transition-colors hover:text-espresso",
-              active && "text-espresso underline decoration-clay decoration-2 underline-offset-[6px]",
-            );
-            return href.startsWith("#") ? (
-              <a key={item.href} href={href} className={className}>
-                {item.label}
-              </a>
-            ) : (
-              <Link key={item.href} href={href} className={className}>
+            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "font-mono text-[11px] uppercase tracking-[0.18em] text-ink/80 transition-colors hover:text-espresso",
+                  active && "text-espresso underline decoration-clay decoration-2 underline-offset-[6px]",
+                )}
+              >
                 {item.label}
               </Link>
             );
@@ -135,35 +123,23 @@ export function SiteHeader() {
                 </div>
                 <nav className="mt-6 flex-1 overflow-y-auto px-5" aria-label="Mobile">
                   <ul>
-                    {nav.map((item, index) => {
-                      const href = itemHref(item.href, pathname);
-                      const className =
-                        "flex items-baseline justify-between border-t border-ink/10 py-3.5";
-                      const label = (
-                        <>
+                    {nav.map((item, index) => (
+                      <motion.li
+                        key={item.href}
+                        initial={{ opacity: 0, x: 16 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.4, delay: 0.08 + 0.05 * index, ease }}
+                      >
+                        <Link
+                          href={item.href}
+                          onClick={() => setOpen(false)}
+                          className="flex items-baseline justify-between border-t border-ink/10 py-3.5"
+                        >
                           <span className="font-sans text-[1.65rem] tracking-tight">{item.label}</span>
                           <span className="font-mono text-[11px] text-clay-deep">0{index + 1}</span>
-                        </>
-                      );
-                      return (
-                        <motion.li
-                          key={item.href}
-                          initial={{ opacity: 0, x: 16 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ duration: 0.4, delay: 0.08 + 0.05 * index, ease }}
-                        >
-                          {href.startsWith("#") ? (
-                            <a href={href} onClick={() => setOpen(false)} className={className}>
-                              {label}
-                            </a>
-                          ) : (
-                            <Link href={href} onClick={() => setOpen(false)} className={className}>
-                              {label}
-                            </Link>
-                          )}
-                        </motion.li>
-                      );
-                    })}
+                        </Link>
+                      </motion.li>
+                    ))}
                   </ul>
                 </nav>
                 <div className="space-y-4 border-t border-ink/10 px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5">

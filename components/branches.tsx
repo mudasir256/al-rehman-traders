@@ -2,18 +2,26 @@ import Image from "next/image";
 import { branches } from "@/lib/site";
 import { SectionIntro } from "@/components/section-intro";
 
-export function Branches({ sequenced = true }: { sequenced?: boolean }) {
+export function Branches({
+  sequenced = true,
+  intro = true,
+}: {
+  sequenced?: boolean;
+  intro?: boolean;
+}) {
   return (
-    <section id="branches" className="border-t border-ink/15 py-20 md:py-28">
+    <section id="branches" className={intro ? "border-t border-ink/15 py-20 md:py-28" : "pb-20 md:pb-28"}>
       <div className="wrap">
-        <SectionIntro
-          index={sequenced ? "05" : ""}
-          label="Branches"
-          title="Find the desk."
-        >
-          Two addresses in Lahore. Call before you come, so the person with your
-          file is the one at the counter.
-        </SectionIntro>
+        {intro ? (
+          <SectionIntro
+            index={sequenced ? "05" : ""}
+            label="Branches"
+            title="Find the desk."
+          >
+            Two addresses in Lahore. Call before you come, so the person with your
+            file is the one at the counter.
+          </SectionIntro>
+        ) : null}
         <div className="relative mb-8 aspect-[16/7] overflow-hidden rounded-lg">
           <Image
             src="/photos/flags.jpg"

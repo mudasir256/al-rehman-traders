@@ -1,22 +1,33 @@
 import Image from "next/image";
+import Link from "next/link";
 import { customGoods, whatsappLink } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 import { SectionIntro } from "@/components/section-intro";
 
-export function CustomGoods() {
-  return (
-    <section id="goods" className="border-t border-ink/15 bg-paper-2 py-20 md:py-28">
-      <div className="wrap">
-        <SectionIntro index="04" label="Custom goods" title="Your idea, made solid.">
-          A sketch, a logo, or a sentence is enough to start. We make these
-          kinds of pieces, and we make the one that does not exist yet — a mug,
-          a sign, a flag, or a board, with your wording on it.
-        </SectionIntro>
+export function CustomGoods({
+  intro = true,
+  preview = false,
+}: {
+  intro?: boolean;
+  preview?: boolean;
+}) {
+  const items = preview ? customGoods.filter((item) => item.featured) : customGoods;
 
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-12 md:gap-4">
-          {customGoods.map((item) => (
-            <article key={item.name} className={`overflow-hidden rounded-lg bg-paper ${item.frame}`}>
-              <div className="relative h-full min-h-0">
+  return (
+    <section id="goods" className={intro ? "border-t border-ink/15 bg-paper-2 py-20 md:py-28" : "bg-paper-2 pb-20 md:pb-28"}>
+      <div className="wrap">
+        {intro ? (
+          <SectionIntro index="04" label="Custom goods" title="Your idea, made solid.">
+            A sketch, a logo, or a sentence is enough to start. A few of the
+            pieces are below. The full set — mugs, signs, flags, shirts, cards,
+            and the thing that does not exist yet — is on the goods page.
+          </SectionIntro>
+        ) : null}
+
+        <div className={preview ? "grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4" : "grid grid-cols-2 gap-3 md:grid-cols-12 md:gap-4"}>
+          {items.map((item) => (
+            <article key={item.name} className={preview ? undefined : item.span}>
+              <div className={`relative overflow-hidden rounded-lg bg-espresso ${preview ? "aspect-[4/5]" : item.ratio}`}>
                 <Image
                   src={item.image}
                   alt={item.alt}
@@ -40,17 +51,24 @@ export function CustomGoods() {
             The photographs show the kinds of objects. The name, the colours,
             and the sentence are yours. Tell us the quantity and the day.
           </p>
-          <Button asChild variant="clay">
-            <a
-              href={whatsappLink(
-                "Hello, I have an idea for a custom product. I can send a sketch or a logo.",
-              )}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Send the idea
-            </a>
-          </Button>
+          <div className="flex flex-wrap gap-3">
+            {preview ? (
+              <Button asChild>
+                <Link href="/goods">All the goods</Link>
+              </Button>
+            ) : null}
+            <Button asChild variant="clay">
+              <a
+                href={whatsappLink(
+                  "Hello, I have an idea for a custom product. I can send a sketch or a logo.",
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Send the idea
+              </a>
+            </Button>
+          </div>
         </div>
       </div>
     </section>

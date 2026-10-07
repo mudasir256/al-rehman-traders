@@ -6,7 +6,13 @@ import { processSteps } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { SectionIntro } from "@/components/section-intro";
 
-export function Process() {
+export function Process({
+  sequenced = true,
+  intro = true,
+}: {
+  sequenced?: boolean;
+  intro?: boolean;
+}) {
   const pinRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const stepRef = useRef(0);
@@ -85,9 +91,11 @@ export function Process() {
             className="object-cover"
           />
         </div>
-        <SectionIntro index="02" label="Process" title="How a job moves." tone="paper">
-          Four steps. You see a proof before we spend the material.
-        </SectionIntro>
+        {intro ? (
+          <SectionIntro index={sequenced ? "02" : ""} label="Process" title="How a job moves." tone="paper">
+            Four steps. You see a proof before we spend the material.
+          </SectionIntro>
+        ) : null}
         <ol>
           {processSteps.map((item) => (
             <li key={item.index} className="border-t border-white/15 py-6">
@@ -115,7 +123,7 @@ export function Process() {
             <div className="grid items-center gap-10 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-clay">
-                  02 — Process
+                  {sequenced ? "02 — Process" : "Process"}
                 </p>
                 <p className="mt-6 font-sans text-[clamp(4.5rem,8vw,7.5rem)] font-medium leading-none tracking-[-0.05em] text-clay">
                   {processSteps[step].index}

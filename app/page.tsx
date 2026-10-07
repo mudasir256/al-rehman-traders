@@ -17,7 +17,7 @@ export default function HomePage() {
       <ServiceIndex />
       <Process />
       <Catalogue />
-      <CustomGoods />
+      <CustomGoods preview />
       <Branches />
       <section id="contact" className="border-t border-ink/15 bg-paper-2 py-20 md:py-28">
         <div className="wrap">

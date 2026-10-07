@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { branches, phones } from "@/lib/site";
+import { branches, nav, phones } from "@/lib/site";
 
 export function SiteFooter() {
   return (
@@ -51,16 +51,12 @@ export function SiteFooter() {
       <div className="border-t border-ink/10">
         <div className="wrap flex flex-col gap-3 py-5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>© Al-Rehman Traders · Lahore</p>
-          <div className="flex gap-5">
-            <Link href="/#goods" className="hover:text-ink">
-              Goods
-            </Link>
-            <Link href="/services" className="hover:text-ink">
-              Services
-            </Link>
-            <Link href="/contact" className="hover:text-ink">
-              Contact
-            </Link>
+          <div className="flex flex-wrap gap-x-5 gap-y-2">
+            {nav.map((item) => (
+              <Link key={item.href} href={item.href} className="hover:text-ink">
+                {item.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
